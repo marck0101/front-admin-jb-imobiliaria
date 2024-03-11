@@ -1,7 +1,6 @@
 import { Input } from '../../components/Input'
-import BgImage from './../../assets/images/login.png'
+import BgImage from './../../assets/images/product-2-min.jpg'
 import Imob from './../../assets/images/imob.png'
-import Logo from './../../assets/images/logo.png'
 
 import { z } from 'zod'
 import { useState } from 'react'
@@ -48,7 +47,7 @@ export function SignIn() {
         <div
           className="h-full w-7/12 shadow-xl hidden md:block"
           style={{
-            // backgroundImage: `url(${Imob})`,
+            backgroundImage: `url(${BgImage})`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center bottom',
