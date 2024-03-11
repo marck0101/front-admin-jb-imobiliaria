@@ -1,0 +1,20 @@
+.ant-picker-cell-today .ant-picker-cell-inner::before {
+    border-color: var(--primary-color) !important;
+}
+
+.ant-picker-cell-selected .ant-picker-cell-inner {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+.ant-picker-focused {
+    border-color: var(--primary-color) !important;
+}
+
+.ant-picker-today-btn {
+    color: var(--primary-color) !important;
+}
+
+.ant-picker-panel-container button:hover {
+    color: var(--primary-color) !important;
+}

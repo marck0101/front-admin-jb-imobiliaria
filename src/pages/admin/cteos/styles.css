@@ -1,0 +1,11 @@
+select:required:invalid {
+    color: #a9a9a9;
+}
+
+option[value=""][disabled] {
+    display: none;
+}
+
+option {
+    color: #000;
+}

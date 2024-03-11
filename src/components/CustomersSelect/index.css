@@ -1,0 +1,9 @@
+/* Hide scrollbar for Chrome, Safari and Opera */
+.select-list ::-webkit-scrollbar {
+  /* display: none; */
+}
+
+.select-list {
+  -ms-overflow-style: none;
+  /* scrollbar-width: none; */
+}
