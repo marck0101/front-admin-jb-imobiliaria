@@ -1,14 +1,15 @@
-import { Input } from '../../components/Input';
-import BgImage from './../../assets/images/login.png';
-import Logo from './../../assets/images/logo.png';
+import { Input } from '../../components/Input'
+import BgImage from './../../assets/images/login.png'
+import Imob from './../../assets/images/imob.png'
+import Logo from './../../assets/images/logo.png'
 
-import { z } from 'zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader } from '../../components/Loader';
-import { useAuth } from '../../contexts/auth';
-import { toast } from 'react-toastify';
+import { z } from 'zod'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Loader } from '../../components/Loader'
+import { useAuth } from '../../contexts/auth'
+import { toast } from 'react-toastify'
 
 const USER_SCHEMA = z.object({
   email: z
@@ -16,38 +17,38 @@ const USER_SCHEMA = z.object({
     .email('Preencha um e-mail válido')
     .nonempty('O email é obrigatório'),
   password: z.string().nonempty('A senha é obrigatória'),
-});
+})
 
-type FormData = z.infer<typeof USER_SCHEMA>;
+type FormData = z.infer<typeof USER_SCHEMA>
 
 export function SignIn() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
-  const { signIn, isUserStorageLoading } = useAuth();
+  const { signIn, isUserStorageLoading } = useAuth()
 
   const Form = useForm({
     resolver: zodResolver(USER_SCHEMA),
-  });
+  })
 
   const handleSignIn = async ({ email, password }: FormData) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await signIn({ email, password });
+      await signIn({ email, password })
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <>
-      <title>Entrar | VDR Petri - Turismo e Viagens</title>
+      <title>Entrar</title>
       <div className="h-screen w-screen flex flex-row">
         <div
           className="h-full w-7/12 shadow-xl hidden md:block"
           style={{
-            backgroundImage: `url(${BgImage})`,
+            // backgroundImage: `url(${Imob})`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center bottom',
@@ -57,13 +58,14 @@ export function SignIn() {
         <div className="w-full h-full flex flex-col justify-between px-16 sm:px-24">
           <div className="mt-6">
             <div className="w-full flex justify-center my-10">
-              <img src={Logo} alt="Logo VDR Petri" width="250px" />
+              {/* <img src={Logo} alt="Logo VDR Petri" width="250px" /> */}
             </div>
 
             <div className="mt-20">
               <p className="text-5xl font-bold">Entrar</p>
               <p className="text-xl text-black/50 mt-2">
-                Entre agora no melhor sistema para <br /> controle de viagens
+                Entre agora no melhor sistema para <br /> controle de
+                Imobiliaria
               </p>
 
               <div className="flex flex-col gap-4 mt-8">
@@ -125,10 +127,10 @@ export function SignIn() {
           </div>
 
           <div className="text-slate-400 text-sm mx-auto md:mx-0 mb-4 w-full text-center">
-            <p>@ 2023, Todos os direitos reservados</p>
+            <p>@ 2024, Todos os direitos reservados</p>
           </div>
         </div>
       </div>
     </>
-  );
+  )
 }
