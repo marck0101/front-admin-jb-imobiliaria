@@ -1,4 +1,4 @@
-import Logo from '../../assets/images/logo.png'
+import Logo from '../../assets/images/imob.png'
 
 //@ts-ignore
 import { ReactComponent as PlusSolidSvg } from '../../assets/svgs/plus-solid.svg'
@@ -58,7 +58,7 @@ export function Sidebar() {
         <div className="px-4 py-6">
           <span className="h-10 w-full flex items-center justify-center pt-14 pb-16 px-8">
             {/* <img src={Logo} alt="Logo VDR Petri" /> */}
-            <img width={200} src={Logo} alt="Logo VDR Petri" />
+            <img width={100} src={Logo} alt="Logo" />
           </span>
 
           <div

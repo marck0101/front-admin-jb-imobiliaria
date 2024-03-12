@@ -1,61 +1,61 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Logo from '../../assets/images/logo.png';
+import Logo from '../../assets/images/imob.png'
 
 //@ts-ignore
-import { ReactComponent as PlusSolidSvg } from '../../assets/svgs/plus-solid.svg';
+import { ReactComponent as PlusSolidSvg } from '../../assets/svgs/plus-solid.svg'
 //@ts-ignore
-import { ReactComponent as FileInvoiceSvg } from '../../assets/svgs/file-invoice-solid.svg';
+import { ReactComponent as FileInvoiceSvg } from '../../assets/svgs/file-invoice-solid.svg'
 //@ts-ignore
-import { ReactComponent as BusSolidSvg } from '../../assets/svgs/bus-solid.svg';
+import { ReactComponent as BusSolidSvg } from '../../assets/svgs/bus-solid.svg'
 //@ts-ignore
-import { ReactComponent as UserSolid } from '../../assets/svgs/user-solid.svg';
+import { ReactComponent as UserSolid } from '../../assets/svgs/user-solid.svg'
 //@ts-ignore
-import { ReactComponent as DoorOpenSolidSvg } from '../../assets/svgs/door-open-solid.svg';
+import { ReactComponent as DoorOpenSolidSvg } from '../../assets/svgs/door-open-solid.svg'
 //@ts-ignore
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 //@ts-ignore
-import DemoApp from '../../pages/admin/calendario/DemoApp';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ReactNode, useEffect, useState } from 'react';
+import DemoApp from '../../pages/admin/calendario/DemoApp'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ReactNode, useEffect, useState } from 'react'
 // import CalendarNavbar from '../../pages/admin/calendario/calendarioNavbar';
 //@ts-ignore
-import DatepickerNavbar from '../../pages/admin/calendario/datepikerNavbar';
-import { RxMagnifyingGlass } from 'react-icons/rx';
+import DatepickerNavbar from '../../pages/admin/calendario/datepikerNavbar'
+import { RxMagnifyingGlass } from 'react-icons/rx'
 //@ts-ignore
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Typography,
-} from '@mui/material';
-import { FaClipboardList } from 'react-icons/fa';
+} from '@mui/material'
+import { FaClipboardList } from 'react-icons/fa'
 //@ts-ignore
-import BasicAccordion from '../../pages/admin/calendario/Accordions';
-import { FaCalendarAlt } from 'react-icons/fa';
+import BasicAccordion from '../../pages/admin/calendario/Accordions'
+import { FaCalendarAlt } from 'react-icons/fa'
 
 export function SidebarCalendario() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [active, setActive] = useState(0);
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [active, setActive] = useState(0)
 
   useEffect(() => {
     if (location.pathname.includes('/notas')) {
-      setActive(1);
+      setActive(1)
     }
 
     if (location.pathname.includes('/notas/cadastrar')) {
-      setActive(0);
+      setActive(0)
     }
 
     if (location.pathname.includes('calendario')) {
-      setActive(2);
+      setActive(2)
     }
 
     if (location.pathname.includes('listaViagem')) {
-      setActive(3);
+      setActive(3)
     }
     if (location.pathname.includes('calendario')) {
-      setActive(4);
+      setActive(4)
     }
     // if (location.pathname.includes('clientes')) {
     //   setActive(3);
@@ -67,14 +67,14 @@ export function SidebarCalendario() {
     //   setActive(5);
     // }
     // setActive(0);
-  }, [location]);
+  }, [location])
 
   return (
     <>
       <div className="w-3/12 flex h-screen flex-col justify-between bg-white shadow-lg z-10">
         <div className="px-4 py-6">
           <span className="h-10 w-full flex items-center justify-center pt-14 pb-16 px-8">
-            <img width={200} src={Logo} alt="Logo VDR Petri" />
+            <img width={100} src={Logo} alt="Logo" />
           </span>
 
           <div
@@ -179,20 +179,20 @@ export function SidebarCalendario() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 interface ItemProps extends Button {
-  isActive: boolean;
-  children: ReactNode;
+  isActive: boolean
+  children: ReactNode
 }
 
-type Button = JSX.IntrinsicElements['button'];
+type Button = JSX.IntrinsicElements['button']
 
 export function Item({ children, isActive, ...rest }: ItemProps) {
   const styles = isActive
     ? 'bg-primary/10 text-primary'
-    : 'bg-gray/5 text-black/70';
+    : 'bg-gray/5 text-black/70'
 
   return (
     <button
@@ -204,5 +204,5 @@ export function Item({ children, isActive, ...rest }: ItemProps) {
     >
       {children}
     </button>
-  );
+  )
 }
