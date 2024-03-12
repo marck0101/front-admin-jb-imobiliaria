@@ -1,56 +1,56 @@
-import Logo from '../../assets/images/logo.png';
+import Logo from '../../assets/images/logo.png'
 
 //@ts-ignore
-import { ReactComponent as PlusSolidSvg } from '../../assets/svgs/plus-solid.svg';
+import { ReactComponent as PlusSolidSvg } from '../../assets/svgs/plus-solid.svg'
 //@ts-ignore
-import { ReactComponent as FileInvoiceSvg } from '../../assets/svgs/file-invoice-solid.svg';
+import { ReactComponent as FileInvoiceSvg } from '../../assets/svgs/file-invoice-solid.svg'
 //@ts-ignore
-import { ReactComponent as BusSolidSvg } from '../../assets/svgs/bus-solid.svg';
+import { ReactComponent as BusSolidSvg } from '../../assets/svgs/bus-solid.svg'
 //@ts-ignore
-import { ReactComponent as UserSolid } from '../../assets/svgs/user-solid.svg';
+import { ReactComponent as UserSolid } from '../../assets/svgs/user-solid.svg'
 //@ts-ignore
-import { ReactComponent as DoorOpenSolidSvg } from '../../assets/svgs/door-open-solid.svg';
+import { ReactComponent as DoorOpenSolidSvg } from '../../assets/svgs/door-open-solid.svg'
 
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ReactNode, useEffect, useState } from 'react';
-import { logout } from '../../helpers/logout';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ReactNode, useEffect, useState } from 'react'
+import { logout } from '../../helpers/logout'
+import { FaCalendarAlt } from 'react-icons/fa'
 // import { MdModeOfTravel } from 'react-icons/md';
-import { FaClipboardList } from 'react-icons/fa';
+import { FaClipboardList } from 'react-icons/fa'
 
 export function Sidebar() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation()
+  const navigate = useNavigate()
 
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(0)
 
   useEffect(() => {
     if (location.pathname.includes('/notas')) {
-      setActive(1);
+      setActive(1)
     }
 
     if (location.pathname.includes('/notas/cadastrar')) {
-      setActive(0);
+      setActive(0)
     }
 
     if (location.pathname.includes('veiculos')) {
-      setActive(2);
+      setActive(2)
     }
 
     if (location.pathname.includes('clientes')) {
-      setActive(3);
+      setActive(3)
     }
     if (location.pathname.includes('calendario')) {
-      setActive(4);
+      setActive(4)
     }
     // if (location.pathname.includes('trips')) {
     //   setActive(5);
     // }
     if (location.pathname.includes('trips')) {
-      setActive(6);
+      setActive(6)
     }
     // setActive(0);
-  }, [location]);
+  }, [location])
 
   return (
     <>
@@ -76,13 +76,13 @@ export function Sidebar() {
                 Cadastrar Nota
               </Item>
             </li> */}
-            <li>
+            {/* <li>
               <Item isActive={active == 1} onClick={() => navigate('/notas')}>
                 <FileInvoiceSvg />
                 Notas
               </Item>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Item
                 isActive={active == 2}
                 onClick={() => navigate('/veiculos')}
@@ -90,7 +90,7 @@ export function Sidebar() {
                 <BusSolidSvg height="22px" />
                 Veículos
               </Item>
-            </li>
+            </li> */}
 
             <li>
               <Item
@@ -108,14 +108,14 @@ export function Sidebar() {
                 Cadastrar Viagem
               </Item>
             </li> */}
-            <li>
+            {/* <li>
               <Item isActive={active == 6} onClick={() => navigate('/trips')}>
                 <FaClipboardList height="25px" />
                 Viagens
               </Item>
-            </li>
+            </li> */}
 
-            <li>
+            {/* <li>
               <Item
                 isActive={active == 4}
                 onClick={() => navigate('/calendario')}
@@ -123,7 +123,7 @@ export function Sidebar() {
                 <FaCalendarAlt height="22px" />
                 Calendário
               </Item>
-            </li>
+            </li> */}
           </ul>
         </div>
 
@@ -142,20 +142,20 @@ export function Sidebar() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 interface ItemProps extends Button {
-  isActive: boolean;
-  children: ReactNode;
+  isActive: boolean
+  children: ReactNode
 }
 
-type Button = JSX.IntrinsicElements['button'];
+type Button = JSX.IntrinsicElements['button']
 
 export function Item({ children, isActive, ...rest }: ItemProps) {
   const styles = isActive
     ? 'bg-primary/10 text-primary'
-    : 'bg-gray/5 text-black/70';
+    : 'bg-gray/5 text-black/70'
 
   return (
     <button
@@ -167,5 +167,5 @@ export function Item({ children, isActive, ...rest }: ItemProps) {
     >
       {children}
     </button>
-  );
+  )
 }
