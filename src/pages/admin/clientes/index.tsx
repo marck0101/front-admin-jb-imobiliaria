@@ -1,133 +1,133 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PageWrapper } from '../../../components/PageWrapper';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { useFetch } from '../../../hooks/useFetch';
-import { FormEvent, useEffect, useState } from 'react';
-import { ICustomer } from '../../../@types/costumer';
+import { PageWrapper } from '../../../components/PageWrapper'
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { useFetch } from '../../../hooks/useFetch'
+import { FormEvent, useEffect, useState } from 'react'
+import { ICustomer } from '../../../@types/costumer'
 //@ts-ignore
-import { ReactComponent as AlertSvg } from '../../../assets/svgs/alert.svg';
+import { ReactComponent as AlertSvg } from '../../../assets/svgs/alert.svg'
 
 //@ts-ignore
-import { ReactComponent as FontAwesomeIcon } from '../../assets/svgs/alert.svg';
+import { ReactComponent as FontAwesomeIcon } from '../../assets/svgs/alert.svg'
 
 //@ts-ignore
-import { ReactComponent as TrashSvg } from '../../../assets/svgs/trash-solid.svg';
+import { ReactComponent as TrashSvg } from '../../../assets/svgs/trash-solid.svg'
 //@ts-ignore
-import { ReactComponent as PenToSquareSvg } from '../../../assets/svgs/pen-to-square-solid.svg';
-import { NotFound } from '../../../components/NotFound';
-import { Loader } from '../../../components/Loader';
-import Tooltip from '@mui/material/Tooltip';
-import { formatToCPF } from '../../../helpers/format-to-cpf';
-import { formatToPhone } from '../../../helpers/phone';
-import { toast } from 'react-toastify';
-import { Popup } from '../../../components/Popup';
-import { Pagination } from '../../../components/Pagination';
-import { Input } from '../../../components/Input';
+import { ReactComponent as PenToSquareSvg } from '../../../assets/svgs/pen-to-square-solid.svg'
+import { NotFound } from '../../../components/NotFound'
+import { Loader } from '../../../components/Loader'
+import Tooltip from '@mui/material/Tooltip'
+import { formatToCPF } from '../../../helpers/format-to-cpf'
+import { formatToPhone } from '../../../helpers/phone'
+import { toast } from 'react-toastify'
+import { Popup } from '../../../components/Popup'
+import { Pagination } from '../../../components/Pagination'
+import { Input } from '../../../components/Input'
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 10
 
 interface DisplayProps {
-  page?: number;
-  status?: 'autorizado' | 'cancelado' | null;
-  to?: string | null;
-  name?: string | null;
+  page?: number
+  status?: 'autorizado' | 'cancelado' | null
+  to?: string | null
+  name?: string | null
 }
 
 export default function Clientes() {
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [clientes, setClientes] = useState<Array<ICustomer>>([]);
-  const [client, setClient] = useState<null | string>(null);
-  const [name, setName] = useState<string>('');
+  const [clientes, setClientes] = useState<Array<ICustomer>>([])
+  const [client, setClient] = useState<null | string>(null)
+  const [name, setName] = useState<string>('')
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isPopupVisible, setIsPopupVisible] = useState(false)
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1)
+  const [total, setTotal] = useState(0)
   const [filtroPassageiros, setFiltroPassageiros] =
-    useState<Array<ICustomer>>(clientes);
+    useState<Array<ICustomer>>(clientes)
 
-  const { api } = useFetch();
+  const { api } = useFetch()
 
   useEffect(() => {
-    display();
-  }, []);
+    display()
+  }, [])
 
   const handleAskToDelete = (_id: string) => {
-    setClient(_id);
-    setIsPopupVisible(true);
-  };
+    setClient(_id)
+    setIsPopupVisible(true)
+  }
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/customers/${client}`);
+      await api.delete(`/customers/${client}`)
       toast('Cliente excluído com sucesso!', {
         type: 'success',
         autoClose: 1500,
-      });
-      display();
+      })
+      display()
     } catch (e) {
-      console.log(e);
-      toast('Não foi possível deletar!', { type: 'error', autoClose: 1500 });
+      console.log(e)
+      toast('Não foi possível deletar!', { type: 'error', autoClose: 1500 })
     } finally {
-      setIsPopupVisible(false);
+      setIsPopupVisible(false)
     }
-  };
+  }
 
   const handleEdit = (_id: string) => {
-    navigate(`/clientes/${_id}`);
-  };
+    navigate(`/clientes/${_id}`)
+  }
 
   const display = async (
     { page }: DisplayProps = {
       page: 1,
-    },
+    }
   ) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const url = `/customers?limit=${PAGE_SIZE}&skip=${
         PAGE_SIZE * ((page || 1) - 1)
-      }&`;
+      }&`
 
-      const { data } = await api.get(url);
-      setClientes(data.data);
-      setTotal(data.count);
+      const { data } = await api.get(url)
+      setClientes(data.data)
+      setTotal(data.count)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleChangePage = (page: number): void => {
-    display({ page });
-    setCurrentPage(page);
-  };
+    display({ page })
+    setCurrentPage(page)
+  }
 
   useEffect(() => {
     //faz um filro dos dados da api e seta de novo nos clientes
-    filterCards();
-  }, [name]);
+    filterCards()
+  }, [name])
 
   const filterCards = async () => {
-    const url = `/customers?name=${name}`;
-    const { data } = await api.get(url);
-    setFiltroPassageiros(data.data);
-  };
+    const url = `/customers?name=${name}`
+    const { data } = await api.get(url)
+    setFiltroPassageiros(data.data)
+  }
 
   const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
-    setName((e.target as HTMLInputElement).value);
-  };
+    setName((e.target as HTMLInputElement).value)
+  }
 
   const handleLimparFiltro = () => {
     // setName(((e.target as HTMLInputElement).innerHTML = ''));
-    setName('');
+    setName('')
     //@ts-ignore
-    document.getElementById('filterClient').value = '';
-  };
+    document.getElementById('filterClient').value = ''
+  }
 
   return (
     <>
@@ -157,7 +157,7 @@ export default function Clientes() {
                 transition={{ duration: 1.5 }}
               >
                 <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-                  <button
+                  {/* <button
                     onClick={() => navigate('/notas')}
                     className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition  hover:scale-105 hover:shadow-xl focus:outline-none focus:ring hover:border-primary hover:text-primary hover:bg-primary/05"
                     type="button"
@@ -178,7 +178,7 @@ export default function Clientes() {
                         d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                       />
                     </svg>
-                  </button>
+                  </button> */}
 
                   <button
                     onClick={() => navigate('/clientes/cadastrar')}
@@ -203,14 +203,14 @@ export default function Clientes() {
                   'name outline-0 px-3 py-3 mt-1 w-full rounded-xl shadow-sm text-base focus:border-primary border border-slate-200 bg-white'
                 }
                 onInput={(e) => {
-                  handleInputChange(e);
+                  handleInputChange(e)
                 }}
               />
 
               {name && (
                 <motion.button
                   onClick={() => {
-                    handleLimparFiltro();
+                    handleLimparFiltro()
                   }}
                   className="text-nowrap text-black border border-black appearance-none outline-0 px-4 py-2.5 mt-1.5 rounded-xl shadow-sm text-base focus:border-primary transition  hover:shadow-lg focus:outline-none focus:ring"
                 >
@@ -356,13 +356,13 @@ export default function Clientes() {
         </div>
       </Popup>
     </>
-  );
+  )
 }
 
 interface CardProps {
-  data: ICustomer;
-  onDelete: (_id: string) => void;
-  onEdit: (_id: string) => void;
+  data: ICustomer
+  onDelete: (_id: string) => void
+  onEdit: (_id: string) => void
 }
 
 function Card({ data, onDelete, onEdit }: CardProps) {
@@ -438,5 +438,5 @@ function Card({ data, onDelete, onEdit }: CardProps) {
         </div>
       </div>
     </motion.div>
-  );
+  )
 }

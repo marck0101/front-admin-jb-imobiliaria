@@ -1,45 +1,45 @@
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { PageWrapper } from '../../../../components/PageWrapper';
-import { Input } from '../../../../components/Input';
-import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { PageWrapper } from '../../../../components/PageWrapper'
+import { Input } from '../../../../components/Input'
+import { useEffect, useState } from 'react'
 
 //@ts-ignore
-import { ReactComponent as ArrowRightSolidSvg } from '../../../../assets/svgs/arrow-right-solid.svg';
+import { ReactComponent as ArrowRightSolidSvg } from '../../../../assets/svgs/arrow-right-solid.svg'
 
-import { Loader } from '../../../../components/Loader';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useFetch } from '../../../../hooks/useFetch';
+import { Loader } from '../../../../components/Loader'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useFetch } from '../../../../hooks/useFetch'
 
 //@ts-ignore
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
-import { toast } from 'react-toastify';
-import { formatToCPF } from '../../../../helpers/format-to-cpf';
-import { formatToCep } from '../../../../helpers/format-to-cep';
-import { getAddressByPostalCode } from '../../../../helpers/get-address-by-postal-code';
+import { toast } from 'react-toastify'
+import { formatToCPF } from '../../../../helpers/format-to-cpf'
+import { formatToCep } from '../../../../helpers/format-to-cep'
+import { getAddressByPostalCode } from '../../../../helpers/get-address-by-postal-code'
 
-import { storage } from './firebase';
+import { storage } from './firebase'
 import {
   deleteObject,
   getDownloadURL,
   ref,
   uploadBytesResumable,
-} from 'firebase/storage';
+} from 'firebase/storage'
 
-import BasicModal from '../../../../components/modal';
+import BasicModal from '../../../../components/modal'
 
-import { Grid } from '@mui/material';
+import { Grid } from '@mui/material'
 
-import ImgView from './ImgView';
-import ImgModal from './imgModal';
-import { NotFound } from '../../../../components/NotFound';
-import { generateRandomUUID } from '../../../../helpers/generate-random-uuid';
-import { Popup } from '../../../../components/Popup';
-import { Select } from '../../../../components/Select';
-import { IRequestError } from '../../../../@types/request-error';
+import ImgView from './ImgView'
+import ImgModal from './imgModal'
+import { NotFound } from '../../../../components/NotFound'
+import { generateRandomUUID } from '../../../../helpers/generate-random-uuid'
+import { Popup } from '../../../../components/Popup'
+import { Select } from '../../../../components/Select'
+import { IRequestError } from '../../../../@types/request-error'
 
 const SCHEMA = z.object({
   name: z.string().min(3, 'Nome muito curto!'),
@@ -57,108 +57,107 @@ const SCHEMA = z.object({
   logradouro: z.string().optional(),
   indicador_inscricao_estadual_tomador: z.string().optional(),
   inscricao_estadual_tomador: z.string().optional(),
-});
+})
 
 interface InfFile {
-  name: string;
-  size: string;
-  type: string;
+  name: string
+  size: string
+  type: string
   // file: InfFileProp;
 }
 
 interface FileProps {
-  name: string;
-  _id?: string;
-  url?: string;
-  file?: InfFile;
-  size: string;
-  type: string;
-  imgURL: string;
-  data: PreviewFileProps;
+  name: string
+  _id?: string
+  url?: string
+  file?: InfFile
+  size: string
+  type: string
+  imgURL: string
+  data: PreviewFileProps
 }
 
 interface PreviewFileProps {
-  name: string;
-  type: string;
-  url: string;
+  name: string
+  type: string
+  url: string
 }
 
 interface RegisterProps {
-  logradouro: string;
-  cep: string;
-  cidade: string;
-  number: string;
-  estado: string;
-  bairro: string;
-  cpfCnpj: string;
-  cpf: string;
-  cnpj: string;
+  logradouro: string
+  cep: string
+  cidade: string
+  number: string
+  estado: string
+  bairro: string
+  cpfCnpj: string
+  cpf: string
+  cnpj: string
 }
 
 const RegisterClientes = () => {
-  const navigate = useNavigate();
-  const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const navigate = useNavigate()
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
 
-  const [files, setFiles] = useState([] as Array<FileProps>);
-  const [open, setOpen] = useState<boolean>(false);
+  const [files, setFiles] = useState([] as Array<FileProps>)
+  const [open, setOpen] = useState<boolean>(false)
 
-  const [previewFile, setPreviewFile] = useState({} as PreviewFileProps);
+  const [previewFile, setPreviewFile] = useState({} as PreviewFileProps)
 
-  const [isModalPreview, setIsModalPreview] = useState(false);
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [arqDelet, setArqDelet] = useState({});
-  const [borrowersIE, setBorrowersIE] = useState('9');
+  const [isModalPreview, setIsModalPreview] = useState(false)
+  const [isPopupVisible, setIsPopupVisible] = useState(false)
+  const [arqDelet, setArqDelet] = useState({})
+  const [borrowersIE, setBorrowersIE] = useState('9')
 
   const Form = useForm({
     resolver: zodResolver(SCHEMA),
-  });
+  })
 
   const handleCancel = () => {
-    navigate('/clientes');
-  };
-  const { api } = useFetch();
+    navigate('/clientes')
+  }
+  const { api } = useFetch()
   // @ts-ignore
   const handleRegister = async (data: RegisterProps) => {
-
-    setIsButtonLoading(true);
+    setIsButtonLoading(true)
     try {
-      let hasError = false;
+      let hasError = false
 
       if (
         borrowersIE === '1' &&
         !Form.getValues('inscricao_estadual_tomador')
       ) {
-        hasError = true;
+        hasError = true
         Form.setError('inscricao_estadual_tomador', {
           message: 'Preencha uma Inscrição estadual do tomador válida!',
-        });
+        })
       }
 
-      let birthdate: string | Date | null = Form.getValues('birthdate') as string;
+      let birthdate: string | Date | null = Form.getValues(
+        'birthdate'
+      ) as string
 
       if (birthdate) {
-
         //@ts-ignore
-        const parts = birthdate.match(/^(\d{2})\/(\d{2})\/(\d{4})$/) || [];
+        const parts = birthdate.match(/^(\d{2})\/(\d{2})\/(\d{4})$/) || []
         const date = new Date(`${parts[3]}-${parts[2]}-${parts[1]}`)
 
         //@ts-ignore
         if (!date || isNaN(date)) {
-          hasError = true;
+          hasError = true
           Form.setError('birthdate', {
-            message: 'Preencha uma data válida!'
-          });
-          birthdate = null;
+            message: 'Preencha uma data válida!',
+          })
+          birthdate = null
         } else {
-          birthdate = date;
+          birthdate = date
         }
-
       }
 
       if (hasError) {
         toast.error('Verifique as informações cadastradas!')
-        setIsButtonLoading(false);
-        return;
+        setIsButtonLoading(false)
+        return
       }
 
       const customer = {
@@ -174,15 +173,15 @@ const RegisterClientes = () => {
           bairro: data.bairro,
         },
         files: [],
-      };
+      }
 
       // @ts-ignore
-      if (birthdate) customer.birthdate = birthdate.toISOString();
+      if (birthdate) customer.birthdate = birthdate.toISOString()
 
       if (data.cpfCnpj.length === 14) {
-        customer.cpf = data.cpfCnpj;
+        customer.cpf = data.cpfCnpj
       } else {
-        customer.cnpj = data.cpfCnpj;
+        customer.cnpj = data.cpfCnpj
       }
 
       // Aqui regras para adicionar imagens
@@ -193,59 +192,59 @@ const RegisterClientes = () => {
           if (!file._id) {
             const storageRef = ref(
               storage,
-              `images/${file.file?.name}${generateRandomUUID()}`,
-            );
+              `images/${file.file?.name}${generateRandomUUID()}`
+            )
 
-            const uploadTask = uploadBytesResumable(storageRef, file.file);
+            const uploadTask = uploadBytesResumable(storageRef, file.file)
 
             const url = await new Promise((resolve) => {
               uploadTask.on(
                 'state_changed',
-                () => { },
+                () => {},
                 (error) => {
-                  alert(error);
+                  alert(error)
                 },
                 () => {
                   getDownloadURL(uploadTask.snapshot.ref).then(
                     async (downloadURL) => {
-                      resolve(downloadURL);
-                    },
-                  );
-                },
-              );
-            });
+                      resolve(downloadURL)
+                    }
+                  )
+                }
+              )
+            })
 
             return {
               url: url,
               name: file.name,
               size: file?.file.size,
               type: file?.file.type,
-            };
+            }
           }
-        }),
-      );
+        })
+      )
 
-      result = result.filter((f) => f && f.url);
+      result = result.filter((f) => f && f.url)
 
       // Aqui se for cadastrar
       if (location.pathname.includes('cadastrar')) {
         //@ts-ignore
-        customer.files = result;
+        customer.files = result
         // Só vai entrar no try depois de já cadastrado, pois vai voltar com o _id
         try {
-          const response = await api.post('/customers', customer);
+          const response = await api.post('/customers', customer)
 
-          if (!response.data._id) throw new Error();
+          if (!response.data._id) throw new Error()
 
-          toast.success('Cliente cadastrado com sucesso!');
-          return navigate('/clientes');
+          toast.success('Cliente cadastrado com sucesso!')
+          return navigate('/clientes')
         } catch (e) {
-          const error = e as IRequestError;
+          const error = e as IRequestError
 
           if (error?.response?.data?.UIDescription) {
-            toast.error(error.response.data.UIDescription);
+            toast.error(error.response.data.UIDescription)
           } else {
-            toast.error('Não foi possível cadastrar!');
+            toast.error('Não foi possível cadastrar!')
           }
         }
       }
@@ -254,168 +253,168 @@ const RegisterClientes = () => {
       if (!location.pathname.includes('cadastrar')) {
         try {
           //@ts-ignore
-          customer.files = result;
+          customer.files = result
 
           await api.put(
             `/customers/${location.pathname.split('/')[2]}`,
-            customer,
-          );
+            customer
+          )
 
-          toast.success('Informações atualizadas com sucesso!');
-          return navigate('/clientes');
+          toast.success('Informações atualizadas com sucesso!')
+          return navigate('/clientes')
         } catch (e) {
-          const error = e as IRequestError;
+          const error = e as IRequestError
           if (error?.response?.data?.UIDescription) {
-            toast.error(error.response.data.UIDescription); // alerta que gosta de ficar se mostrando kkkk
+            toast.error(error.response.data.UIDescription) // alerta que gosta de ficar se mostrando kkkk
           } else {
-            toast.error('Não foi possível atualizar as informações!');
+            toast.error('Não foi possível atualizar as informações!')
           }
         }
       }
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      setIsButtonLoading(false);
+      setIsButtonLoading(false)
     }
-  };
+  }
 
   const deleteImagemFirebase = async (
-    imgURL: FileProps | unknown,
+    imgURL: FileProps | unknown
   ): Promise<void> => {
-    if (!imgURL) return;
+    if (!imgURL) return
     try {
       // Obtém a referência para o arquivo usando a URL
       //@ts-ignore
-      const storageRef = ref(storage, imgURL);
+      const storageRef = ref(storage, imgURL)
       // Deleta o arquivo do Firebase Storage
-      await deleteObject(storageRef);
+      await deleteObject(storageRef)
     } catch (error) {
-      console.error('Erro ao deletar arquivo:', error);
+      console.error('Erro ao deletar arquivo:', error)
     }
-  };
+  }
 
   const handleDelete = async (data: FileProps) => {
     // TO-DO: Validar com ifs se usuário já está cadastrado ou não e seguir com as logícas para deletar imagens locais ou remotas
-    const id = data._id;
-    const fileIds = [];
+    const id = data._id
+    const fileIds = []
 
-    const fileName: FileProps | string | undefined = data.url; // Nome do arquivo que você quer deletar no Firebase Storage
+    const fileName: FileProps | string | undefined = data.url // Nome do arquivo que você quer deletar no Firebase Storage
 
     if (fileName && fileName !== undefined) {
-      deleteImagemFirebase(fileName);
+      deleteImagemFirebase(fileName)
     }
 
     try {
       if (location.pathname.split('/')[2] !== 'cadastrar') {
         const buscaApi = await api.get(
-          `/ customers / ${location.pathname.split('/')[2]}`,
-        );
+          `/ customers / ${location.pathname.split('/')[2]}`
+        )
         buscaApi.data.files.map((item: FileProps) => {
-          fileIds.push(item._id); // Aqui é o id que já vai estar no banco
-        });
+          fileIds.push(item._id) // Aqui é o id que já vai estar no banco
+        })
       }
 
       // faz o filtro
-      const filtro = files.filter((file) => file._id !== id); // aqui estou dizendo que quero retornar _id diferente do meu idzão que quero apagar
+      const filtro = files.filter((file) => file._id !== id) // aqui estou dizendo que quero retornar _id diferente do meu idzão que quero apagar
       if (id) {
         const customer = {
           files: filtro,
-        };
+        }
         api
           .put(
             `/customers/${location.pathname.split('/')[2]}?deleteFiles=true`,
-            customer,
+            customer
           )
           .then(() => {
-            toast.success('Informações atualizadas com sucesso!');
+            toast.success('Informações atualizadas com sucesso!')
           })
           .catch((error) => {
-            console.log('Erro', error);
-          });
-        setFiles(filtro);
+            console.log('Erro', error)
+          })
+        setFiles(filtro)
       } else {
-        deleteImagemFirebase(fileName);
+        deleteImagemFirebase(fileName)
         // setFiles(filtro)
         setFiles(
           files.filter(
-            (file: FileProps) => file.file?.name !== data?.file?.name,
-          ),
-        );
+            (file: FileProps) => file.file?.name !== data?.file?.name
+          )
+        )
       }
-      deleteImagemFirebase(fileName);
-      setIsPopupVisible(false);
+      deleteImagemFirebase(fileName)
+      setIsPopupVisible(false)
     } catch (error) {
-      console.log('error', error);
+      console.log('error', error)
     }
-  };
+  }
 
   useEffect(() => {
     //Aqui se for editar, só serve para setar os campos
     if (!location.pathname.includes('cadastrar')) {
-      (async () => {
-        setIsButtonLoading(true);
+      ;(async () => {
+        setIsButtonLoading(true)
         try {
           const { data } = await api.get(
-            `/customers/${location.pathname.split('/')[2]}`,
-          );
+            `/customers/${location.pathname.split('/')[2]}`
+          )
 
-          if (!data._id) return;
+          if (!data._id) return
 
-          if (data.name) Form.setValue('name', data.name);
-          if (data.fantasyname) Form.setValue('fantasyname', data.fantasyname);
+          if (data.name) Form.setValue('name', data.name)
+          if (data.fantasyname) Form.setValue('fantasyname', data.fantasyname)
 
-          if (data.rg) Form.setValue('rg', data.rg);
+          if (data.rg) Form.setValue('rg', data.rg)
           if (data.cpf || data.cnpj)
             Form.setValue(
               'cpfCnpj',
-              data.cpf ? formatToCPF(data.cpf) : formatToCPF(data.cnpj),
-            );
-          if (data.phone) Form.setValue('phone', data.phone);
-          if (data.email) Form.setValue('email', data.email);
+              data.cpf ? formatToCPF(data.cpf) : formatToCPF(data.cnpj)
+            )
+          if (data.phone) Form.setValue('phone', data.phone)
+          if (data.email) Form.setValue('email', data.email)
 
           if (data.address) {
-            const address = data.address;
-            if (address.cep) Form.setValue('cep', formatToCep(address.cep));
-            if (address.city) Form.setValue('cidade', address.city);
-            if (address.state) Form.setValue('estado', address.state);
-            if (address.street) Form.setValue('logradouro', address.street);
-            if (address.bairro) Form.setValue('bairro', address.bairro);
-            if (address.number) Form.setValue('number', address.number);
+            const address = data.address
+            if (address.cep) Form.setValue('cep', formatToCep(address.cep))
+            if (address.city) Form.setValue('cidade', address.city)
+            if (address.state) Form.setValue('estado', address.state)
+            if (address.street) Form.setValue('logradouro', address.street)
+            if (address.bairro) Form.setValue('bairro', address.bairro)
+            if (address.number) Form.setValue('number', address.number)
           }
 
           if (data.files) {
-            setFiles(data.files);
+            setFiles(data.files)
           }
           if (data.takerIndicator) {
-            setBorrowersIE(data.takerIndicator);
+            setBorrowersIE(data.takerIndicator)
             //@ts-ignore
             document.getElementById(
-              'indicador_inscricao_estadual_tomador',
+              'indicador_inscricao_estadual_tomador'
               //@ts-ignore
-            ).value = data.takerIndicator;
+            ).value = data.takerIndicator
           }
 
           if (data.borrowerRegistration) {
             Form.setValue(
               'inscricao_estadual_tomador',
-              data.borrowerRegistration,
-            );
+              data.borrowerRegistration
+            )
           }
         } catch (e) {
-          console.log(e);
+          console.log(e)
         } finally {
-          setIsButtonLoading(false);
+          setIsButtonLoading(false)
         }
-      })();
+      })()
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (open === true) {
       //@ts-ignore
-      document.querySelector('#formFileSm').click();
+      document.querySelector('#formFileSm').click()
     }
-  }, [open]);
+  }, [open])
 
   return (
     <>
@@ -502,7 +501,7 @@ const RegisterClientes = () => {
                 transition={{ duration: 1.5 }}
               >
                 <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-                  <button
+                  {/* <button
                     onClick={() => navigate('/notas/cadastrar')}
                     className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition  hover:scale-105 hover:shadow-xl focus:outline-none focus:ring hover:border-primary hover:text-primary hover:bg-primary/05"
                     type="button"
@@ -523,7 +522,7 @@ const RegisterClientes = () => {
                         d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                       />
                     </svg>
-                  </button>
+                  </button> */}
 
                   <button
                     onClick={() => navigate('/clientes')}
@@ -541,7 +540,6 @@ const RegisterClientes = () => {
               className="bg-stone-300 rounded-lg my-8"
             ></div>
             <div>
-
               <div className="grid grid-cols-12 gap-4 mt-4">
                 <div className="flex flex-col col-span-4">
                   <label className="block text-base font-medium text-black/70">
@@ -619,7 +617,7 @@ const RegisterClientes = () => {
                       </label>
 
                       <Input
-                        mask='date'
+                        mask="date"
                         type="text"
                         maxLength={10}
                         placeholder="00/00/0000"
@@ -645,8 +643,6 @@ const RegisterClientes = () => {
                     schema={SCHEMA}
                   />
                 </div>
-
-
 
                 <div
                   className={
@@ -685,11 +681,11 @@ const RegisterClientes = () => {
                 )}
               </div>
 
-
-              <p className="font-bold text-base mt-8">Informações do Endereço</p>
+              <p className="font-bold text-base mt-8">
+                Informações do Endereço
+              </p>
 
               <div className="grid grid-cols-12 gap-4 mt-4">
-
                 <div className="flex flex-col col-span-3">
                   <label className="block text-base font-medium text-black/70">
                     CEP
@@ -706,25 +702,25 @@ const RegisterClientes = () => {
                     onChange={async (e) => {
                       try {
                         if (e.target.value.replace(/\D/g, '').length != 8) {
-                          return;
+                          return
                         }
 
                         const adddress = await getAddressByPostalCode(
-                          e.target.value,
-                        );
+                          e.target.value
+                        )
 
                         if (adddress.codigo_ibge) {
-                          if (adddress.uf) Form.setValue('estado', adddress.uf);
+                          if (adddress.uf) Form.setValue('estado', adddress.uf)
                           if (adddress.nome_localidade)
-                            Form.setValue('cidade', adddress.nome_localidade);
+                            Form.setValue('cidade', adddress.nome_localidade)
                           if (adddress.nome_logradouro)
                             Form.setValue(
                               'logradouro',
-                              adddress.nome_logradouro,
-                            );
+                              adddress.nome_logradouro
+                            )
                         }
                       } catch (e) {
-                        console.error(e);
+                        console.error(e)
                       }
                     }}
                   />
@@ -805,48 +801,41 @@ const RegisterClientes = () => {
                     schema={SCHEMA}
                   />
                 </div>
-
               </div>
 
-              <div className='mt-8'>
-                <p className="font-bold text-base">
-                  Arquivos do Cliente
-                </p>
+              <div className="mt-8">
+                <p className="font-bold text-base">Arquivos do Cliente</p>
 
-                <div
-                  className='flex flex-row mt-2'
-                >
+                <div className="flex flex-row mt-2">
                   <BasicModal
                     onSubmitUpload={(data) => {
                       if (data.file && data.name) {
                         //@ts-ignore
-                        setFiles((prevState) => [...prevState, data]);
-                        setOpen(false);
+                        setFiles((prevState) => [...prevState, data])
+                        setOpen(false)
                       } else {
-                        toast.error(
-                          'Adicione um documento para enviar!',
-                        );
-                        setOpen(false);
+                        toast.error('Adicione um documento para enviar!')
+                        setOpen(false)
                       }
                     }}
                     open={open}
                     setOpen={setOpen}
                   />
-                  <input
-                    type="file"
-                    className="hidden"
-                    id="formFileSm"
-                  />
+                  <input type="file" className="hidden" id="formFileSm" />
                 </div>
 
                 {files.length === 0 ? (
-                  <NotFound title="Nenhum documento cadastrado!" subtitle="Nenhum arquivo foi cadastrado para esse cliente." cta={{ text: 'Adicionar', onClick: () => setOpen(true) }} />
+                  <NotFound
+                    title="Nenhum documento cadastrado!"
+                    subtitle="Nenhum arquivo foi cadastrado para esse cliente."
+                    cta={{ text: 'Adicionar', onClick: () => setOpen(true) }}
+                  />
                 ) : (
                   <>
                     {files?.map((file) => (
                       <div
                         key={file.url || file?.file?.name}
-                        className='flex flex-row mt-2'
+                        className="flex flex-row mt-2"
                       >
                         <ImgView
                           name={file.name}
@@ -854,20 +843,20 @@ const RegisterClientes = () => {
                           url={file.url}
                           inf={file}
                           onPreview={() => {
-                            setIsModalPreview(true);
+                            setIsModalPreview(true)
                             setPreviewFile({
                               name: file.name,
                               //@ts-ignore
                               url: file.url
                                 ? file.url
                                 : //@ts-ignore
-                                URL.createObjectURL(file.file),
+                                  URL.createObjectURL(file.file),
                               type: file?.file ? file?.file.type : file.type,
-                            });
+                            })
                           }}
                           onDelete={async () => {
-                            setIsPopupVisible(true);
-                            setArqDelet(file);
+                            setIsPopupVisible(true)
+                            setArqDelet(file)
                           }}
                         />
                       </div>
@@ -932,8 +921,8 @@ const RegisterClientes = () => {
             </div>
           </div>
         </div>
-      </PageWrapper >
+      </PageWrapper>
     </>
-  );
-};
-export default RegisterClientes;
+  )
+}
+export default RegisterClientes

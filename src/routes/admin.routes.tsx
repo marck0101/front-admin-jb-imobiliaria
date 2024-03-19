@@ -19,23 +19,10 @@ export function AdminRoutes() {
   return (
     <AnimatePresence>
       <Routes location={location} key={location.pathname}>
-        {/* <Route path="/veiculos" index element={<Vehicles />} />
-        <Route path="/veiculos/*" index element={<RegisterVehicle />} /> */}
         <Route path="/clientes" index element={<Clientes />} />
         <Route path="/clientes/*" index element={<RegisterClientes />} />
-        {/* <Route
-          path="/calendario/"
-          index
-          element={
-            <CalendarProvider>
-              <Calendario />
-            </CalendarProvider>
-          }
-        /> */}
-        {/* <Route path="/trips" index element={<ListaViagem />} />
-        <Route path="/trips/*" index element={<CadastroViagens />} /> */}
+
         <Route path="/*" index element={<Clientes />} />
-        {/* <Route path="/notas/cadastrar" index element={<RegisterCteos />} /> */}
       </Routes>
     </AnimatePresence>
   )
