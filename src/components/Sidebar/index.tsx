@@ -43,7 +43,7 @@ export function Sidebar() {
                 isActive={active == 3}
                 onClick={() => navigate('/clientes')}
               >
-                <BiHome height="22px" />
+                <BiHome height="12px" />
                 Cadastrar
               </Item>
             </li>

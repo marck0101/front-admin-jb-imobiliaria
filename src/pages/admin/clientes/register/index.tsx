@@ -255,10 +255,7 @@ const RegisterClientes = () => {
           //@ts-ignore
           customer.files = result
 
-          await api.put(
-            `/customers/${location.pathname.split('/')[2]}`,
-            customer
-          )
+          await api.put(`/home/${location.pathname.split('/')[2]}`, customer)
 
           toast.success('Informações atualizadas com sucesso!')
           return navigate('/clientes')
@@ -322,7 +319,7 @@ const RegisterClientes = () => {
         }
         api
           .put(
-            `/customers/${location.pathname.split('/')[2]}?deleteFiles=true`,
+            `/home/${location.pathname.split('/')[2]}?deleteFiles=true`,
             customer
           )
           .then(() => {
@@ -510,29 +507,6 @@ const RegisterClientes = () => {
                 transition={{ duration: 1.5 }}
               >
                 <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-                  {/* <button
-                    onClick={() => navigate('/notas/cadastrar')}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition  hover:scale-105 hover:shadow-xl focus:outline-none focus:ring hover:border-primary hover:text-primary hover:bg-primary/05"
-                    type="button"
-                  >
-                    <span className="text-sm font-medium">Cadastrar Notas</span>
-
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                  </button> */}
-
                   <button
                     onClick={() => navigate('/clientes')}
                     className="block rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring"

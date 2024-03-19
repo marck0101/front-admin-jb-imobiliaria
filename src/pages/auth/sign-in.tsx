@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader } from '../../components/Loader'
 import { useAuth } from '../../contexts/auth'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 
 const USER_SCHEMA = z.object({
   email: z
@@ -57,7 +57,7 @@ export function SignIn() {
         <div className="w-full h-full flex flex-col justify-between px-16 sm:px-24">
           <div className="mt-6">
             <div className="w-full flex justify-center my-10">
-              {/* <img src={Logo} alt="Logo VDR Petri" width="250px" /> */}
+              <img src={Imob} alt="Logo VDR Petri" width="250px" />
             </div>
 
             <div className="mt-20">
