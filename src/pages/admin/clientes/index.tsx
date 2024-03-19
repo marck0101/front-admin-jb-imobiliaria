@@ -129,6 +129,16 @@ export default function Clientes() {
     document.getElementById('filterClient').value = ''
   }
 
+  useEffect(() => {
+    console.log('Chegou aqui')
+
+    const buscaApi = async () => {
+      const response = await api.get('/home')
+      console.log('response', response.data.data)
+    }
+    buscaApi()
+  }, [])
+
   return (
     <>
       <PageWrapper>

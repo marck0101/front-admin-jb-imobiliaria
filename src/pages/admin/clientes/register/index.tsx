@@ -307,7 +307,7 @@ const RegisterClientes = () => {
     try {
       if (location.pathname.split('/')[2] !== 'cadastrar') {
         const buscaApi = await api.get(
-          `/ customers / ${location.pathname.split('/')[2]}`
+          `/home/ ${location.pathname.split('/')[2]}`
         )
         buscaApi.data.files.map((item: FileProps) => {
           fileIds.push(item._id) // Aqui é o id que já vai estar no banco
@@ -416,6 +416,15 @@ const RegisterClientes = () => {
     }
   }, [open])
 
+  useEffect(() => {
+    console.log('Chegou aqui')
+
+    const buscaApi = async () => {
+      const response = await api.get('/home')
+      console.log('response', response.data.data)
+    }
+    buscaApi()
+  }, [])
   return (
     <>
       <title>Cadastrar Clientes | VDR Petri - Turismo e Viagens</title>
