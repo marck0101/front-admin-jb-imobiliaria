@@ -492,14 +492,14 @@ const RegisterClientes = () => {
                   <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
                     {/* Cadastrar Cliente */}
                     {location.pathname.includes('cadastrar')
-                      ? 'Cadastrar Cliente'
-                      : 'Atualizar Cliente'}
+                      ? 'Cadastrar Imóveis'
+                      : 'Atualizar Imóveis'}
                   </h1>
 
                   <p className="mt-1.5 text-sm text-black/50">
                     {location.pathname.includes('cadastrar')
-                      ? 'Aqui você pode cadastrar todas as informações sobre os seus clientes.'
-                      : 'Aqui você pode atualizar todas as informações sobre os seus clientes.'}
+                      ? 'Aqui você pode cadastrar todas as informações sobre os seus Imóveis.'
+                      : 'Aqui você pode atualizar todas as informações sobre os seus Imóveis.'}
                   </p>
                 </div>
               </motion.div>

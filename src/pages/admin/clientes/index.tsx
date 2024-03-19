@@ -88,11 +88,11 @@ export default function Clientes() {
   ) => {
     setIsLoading(true)
     try {
-      const url = `/customers?limit=${PAGE_SIZE}&skip=${
-        PAGE_SIZE * ((page || 1) - 1)
-      }&`
+      // const url = `/customers?limit=${PAGE_SIZE}&skip=${
+      //   PAGE_SIZE * ((page || 1) - 1)
+      // }&`
 
-      const { data } = await api.get(url)
+      const { data } = await api.get(`/home`)
       setClientes(data.data)
       setTotal(data.count)
     } catch (e) {
@@ -152,11 +152,10 @@ export default function Clientes() {
               >
                 <div className="text-center sm:text-left">
                   <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                    Clientes
+                    Posts
                   </h1>
                   <p className="mt-1.5 text-sm text-black/50">
-                    Aqui você pode ver todas as informações sobre os seus
-                    clientes.
+                    Aqui você pode ver todas as informações sobre os seus posts.
                   </p>
                 </div>
               </motion.div>
